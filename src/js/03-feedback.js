@@ -20,10 +20,12 @@ function saveStatus() {
   };
   localStorage.setItem('feedback-form-state', JSON.stringify(data));
 }
-
+function fillForm() {
+  saveStatus();
+  update();
+}
 function clear(ev) {
   ev.preventDefault();
-  console.log(data);
   localStorage.clear();
   form.reset();
 }
