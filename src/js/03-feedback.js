@@ -1,5 +1,5 @@
-import throttle from 'lodash.throttle';
-
+// import throttle from 'lodash.throttle';
+const throttle = require('lodash.throttle');
 const form = document.querySelector('.feedback-form');
 const emailInput = document.querySelector('input[name= "email"]');
 const messageInput = document.querySelector('textarea[name= "message"]');
@@ -13,6 +13,8 @@ function update() {
   messageInput.value = updateItem.message || '';
 }
 
+update();
+
 function saveStatus() {
   const data = {
     email: emailInput.value,
@@ -24,11 +26,11 @@ function fillForm() {
   saveStatus();
   update();
 }
-function clear(ev) {
+function clearForm(ev) {
   ev.preventDefault();
   localStorage.clear();
   form.reset();
 }
 
-form.addEventListener('input', throttle(fillForm, 500));
-button.addEventListener('submit', clear);
+form.addEventListener('input', throttle(saveStatus, 500));
+form.addEventListener('submit', clearForm);
