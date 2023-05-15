@@ -1,36 +1,45 @@
-// import throttle from 'lodash.throttle';
-const throttle = require('lodash.throttle');
-const form = document.querySelector('.feedback-form');
-const emailInput = document.querySelector('input[name= "email"]');
-const messageInput = document.querySelector('textarea[name= "message"]');
-const button = document.querySelector('button[type= "submit" ]');
+import throttle from 'lodash.throttle';
 
-function update() {
-  const updateItem = JSON.parse(
-    localStorage.getItem('feedback-form-state') || '{}'
-  );
-  emailInput.value = updateItem.email || '{}';
-  messageInput.value = updateItem.message || '{}';
+const btnEl = document.querySelector('button[type="submit"]');
+const emailEl = document.querySelector('input[type="email"]');
+const messageEl = document.querySelector('textarea[name="message"]');
+
+let data = {};
+
+if (!localStorage.getItem('feedback-form-state')) {
+  data = {
+    email: '',
+    message: '',
+  };
+} else {
+  data = JSON.parse(localStorage.getItem('feedback-form-state'));
 }
 
-update();
+const checkLocalStorage = () => {
+  const savedData = JSON.parse(localStorage.getItem('feedback-form-state'));
 
-function saveStatus() {
-  const data = {
-    email: emailInput.value,
-    message: messageInput.value,
-  };
+  if (savedData) {
+    emailEl.value = savedData.email;
+    messageEl.value = savedData.message;
+  } else {
+    emailEl.value = '';
+    messageEl.value = '';
+  }
+};
+
+checkLocalStorage();
+
+function localData(event) {
+  data[event.target.name] = event.target.value;
   localStorage.setItem('feedback-form-state', JSON.stringify(data));
 }
-function fillForm() {
-  saveStatus();
-  update();
-}
-function clearForm(ev) {
-  ev.preventDefault();
+
+function resetLocalSorage(event) {
+  event.preventDefault();
   localStorage.clear();
-  form.reset();
+  checkLocalStorage();
 }
 
-form.addEventListener('input', throttle(saveStatus, 500));
-form.addEventListener('submit', clearForm);
+emailEl.addEventListener('input', throttle(localData, 1000));
+messageEl.addEventListener('input', throttle(localData, 1000));
+btnEl.addEventListener('click', resetLocalSorage);
