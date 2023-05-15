@@ -7,10 +7,10 @@ const button = document.querySelector('button[type= "submit" ]');
 
 function update() {
   const updateItem = JSON.parse(
-    localStorage.getItem('feedback-form-state' || '')
+    localStorage.getItem('feedback-form-state') || '{}'
   );
-  emailInput.value = updateItem.email || '';
-  messageInput.value = updateItem.message || '';
+  emailInput.value = updateItem.email || '{}';
+  messageInput.value = updateItem.message || '{}';
 }
 
 update();
